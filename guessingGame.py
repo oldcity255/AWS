@@ -17,4 +17,5 @@ print("Avarege: ", sum(userInputs)/len(userInputs))
 
 print("Merhaba from git session in vs code")
 
+print("test for compare and pull request")
 
