@@ -2,7 +2,7 @@ userInputs = []
 numGreater90 = []
 score = 0
 while score >= 0:
-    score = int(input("Put a number, to exit enter a negative number: "))
+    score = int(input("Put a number, to exit enter a negative numbers: "))
     if score >= 90:
         userInputs.append(score)
         numGreater90.append(score)
