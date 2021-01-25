@@ -17,3 +17,4 @@ print("Avarege: ", sum(userInputs)/len(userInputs))
 
 
 print("adding line after git checkout to main")
+print("adding line after git checkout to main2 for test")
