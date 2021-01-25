@@ -14,3 +14,6 @@ print(userInputs)
 print(numGreater90)
 print("Bigger than 90: ", len(numGreater90))
 print("Avarege: ", sum(userInputs)/len(userInputs))
+
+
+print("adding line after git checkout to main")
