@@ -4,7 +4,7 @@ Parameters:
     Description: AMI for the 1st instance(default is latest AmaLinux2)
     Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
     Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
-  KeyName:
+  azatKey:
     Type: 'AWS::EC2::KeyPair::KeyName'
     Description: "SSH keypair name"
   subnet1:
@@ -23,7 +23,7 @@ Resources:
   Instance1:
     Type: AWS::EC2::Instance
     Properties:
-      KeyName: !Ref KeyName
+      KeyName: !Ref azatKey
       InstanceType: "t2.micro"
       ImageId: !Ref amiId
       SubnetId: !Ref subnet1
@@ -32,10 +32,14 @@ Resources:
       Tags:
         - Key: Name
           Value: Server1_usEast1a
+        - Key: TechnicalTeam
+          Value: DevOps
+        - Key: BusinessTeam
+          Value: Appraisal
   Instance2:
     Type: AWS::EC2::Instance
     Properties:
-      KeyName: !Ref KeyName
+      KeyName: !Ref azatKey
       InstanceType: "t2.micro"
       ImageId: !Ref amiId
       SubnetId: !Ref subnet2
@@ -44,3 +48,7 @@ Resources:
       Tags:
         - Key: Name
           Value: Server2_usEast1b
+        - Key: TechnicalTeam
+          Value: DevOps
+        - Key: BusinessTeam
+          Value: Underwriting

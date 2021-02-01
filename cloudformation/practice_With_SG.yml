@@ -1,4 +1,4 @@
-Description:  Automation of 2 EC2 creations in us-east-1
+Description:  Automation of 2 EC2 creations in us-west-2
 Parameters:
   amiId:
     Description: AMI for the 1st instance(default is latest AmaLinux2)
@@ -31,7 +31,11 @@ Resources:
         - !Ref SGID
       Tags:
         - Key: Name
-          Value: Server1_usEast1a
+          Value: Server1_usWest2b
+        - Key: TechnicalTeam
+          Value: Devops
+        - Key: BusinessTeam
+          Value: Appraisal
   Instance2:
     Type: AWS::EC2::Instance
     Properties:
@@ -43,4 +47,8 @@ Resources:
         - !Ref SGID
       Tags:
         - Key: Name
-          Value: Server2_usEast1b
+          Value: Server2_usWest2c
+        - Key: TechnicalTeam
+          Value: Devops
+        - Key: BusinessTeam
+          Value: Yomut
