@@ -298,4 +298,3 @@ Resources:
     Properties:
       RouteTableId: !Ref PrivateRouteTable2
       SubnetId: !Ref PrivateDBSubnet2
-
