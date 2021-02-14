@@ -1,4 +1,4 @@
-Description:  Full VPC STack with 3 tiers and 3 subnets in each tier.
+Description:  Full VPC Stack with 3 tiers and 2 subnets in each tier. 
 
 Parameters:
   EnvironmentName:
@@ -20,40 +20,25 @@ Parameters:
     Type: String
     Default: 10.0.5.0/24
 
-  PublicSubnet3CIDR:
-    Description: Please enter the IP range (CIDR notation) for the public subnet in the second Availability Zone
-    Type: String
-    Default: 10.0.10.0/24
-  
   PrivateSubnet1CIDR:
     Description: Please enter the IP range (CIDR notation) for the private subnet in the first Availability Zone
     Type: String
-    Default: 10.0.15.0/24
+    Default: 10.0.10.0/24
 
   PrivateSubnet2CIDR:
     Description: Please enter the IP range (CIDR notation) for the private subnet in the second Availability Zone
     Type: String
-    Default: 10.0.20.0/24
+    Default: 10.0.15.0/24
   
-  PrivateSubnet3CIDR:
-    Description: Please enter the IP range (CIDR notation) for the private subnet in the second Availability Zone
-    Type: String
-    Default: 10.0.25.0/24
-
   PrivateDBSubnet1CIDR:
     Description: Please enter the IP range (CIDR notation) for the private subnet in the first Availability Zone
     Type: String
-    Default: 10.0.30.0/24
+    Default: 10.0.20.0/24
 
   PrivateDBSubnet2CIDR:
     Description: Please enter the IP range (CIDR notation) for the private subnet in the second Availability Zone
     Type: String
-    Default: 10.0.35.0/24
-  
-  PrivateDBSubnet3CIDR:
-    Description: Please enter the IP range (CIDR notation) for the private subnet in the second Availability Zone
-    Type: String
-    Default: 10.0.40.0/24
+    Default: 10.0.25.0/24
 Resources:
   VPC:
     Type: AWS::EC2::VPC
@@ -63,28 +48,28 @@ Resources:
       EnableDnsHostnames: true
       Tags:
         - Key: Name
-          Value: vepaVPC
+          Value: sprintqaVPC
   
   InternetGateway:
     Type: AWS::EC2::InternetGateway
     Properties:
       Tags:
         - Key: Name
-          Value: vepaIGW
+          Value: sprintqaIGW
 
   InternetGatewayAttachment:
     Type: AWS::EC2::VPCGatewayAttachment
     Properties:
       InternetGatewayId: !Ref InternetGateway
       VpcId: !Ref VPC
-
+  
   PublicSubnet1:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
-      AvailabilityZone: !Select [ 0, !GetAZs '' ] #uswest2a
-      CidrBlock: !Ref PublicSubnet1CIDR
-      MapPublicIpOnLaunch: true
+      AvailabilityZone: !Select [ 0, !GetAZs '' ] #us-east-1a from GetAZs function 
+      CidrBlock: !Ref PublicSubnet1CIDR #get cidr block from parameters
+      MapPublicIpOnLaunch: true #enable public ip by default
       Tags:
         - Key: Name
           Value: !Sub ${EnvironmentName}-PublicSubnet1
@@ -93,29 +78,18 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
-      AvailabilityZone: !Select [ 1, !GetAZs  '' ] #uswest2b
+      AvailabilityZone: !Select [ 1, !GetAZs  '' ] # us-east-1b
       CidrBlock: !Ref PublicSubnet2CIDR
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
           Value: !Sub ${EnvironmentName}-PublicSubnet2
-
-  PublicSubnet3:
-    Type: AWS::EC2::Subnet
-    Properties:
-      VpcId: !Ref VPC
-      AvailabilityZone: !Select [ 2, !GetAZs  '' ] #uswest2c
-      CidrBlock: !Ref PublicSubnet3CIDR
-      MapPublicIpOnLaunch: true
-      Tags:
-        - Key: Name
-          Value: !Sub ${EnvironmentName}-PublicSubnet3
-
+  
   PrivateSubnet1:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
-      AvailabilityZone: !Select [ 0, !GetAZs  '' ]
+      AvailabilityZone: !Select [ 0, !GetAZs  '' ] # us-east-1a
       CidrBlock: !Ref PrivateSubnet1CIDR
       MapPublicIpOnLaunch: false
       Tags:
@@ -126,28 +100,18 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
-      AvailabilityZone: !Select [ 1, !GetAZs  '' ]
+      AvailabilityZone: !Select [ 1, !GetAZs  '' ] #us-east-1b
       CidrBlock: !Ref PrivateSubnet2CIDR
       MapPublicIpOnLaunch: false
       Tags:
         - Key: Name
           Value: !Sub ${EnvironmentName}-PrivateSubnet2
-  PrivateSubnet3:
-    Type: AWS::EC2::Subnet
-    Properties:
-      VpcId: !Ref VPC
-      AvailabilityZone: !Select [ 2, !GetAZs  '' ]
-      CidrBlock: !Ref PrivateSubnet3CIDR
-      MapPublicIpOnLaunch: false
-      Tags:
-        - Key: Name
-          Value: !Sub ${EnvironmentName}-PrivateSubnet3
-
+  
   PrivateDBSubnet1:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
-      AvailabilityZone: !Select [ 0, !GetAZs  '' ]
+      AvailabilityZone: !Select [ 0, !GetAZs  '' ] # us-east-1a
       CidrBlock: !Ref PrivateDBSubnet1CIDR
       MapPublicIpOnLaunch: false
       Tags:
@@ -158,23 +122,13 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
-      AvailabilityZone: !Select [ 1, !GetAZs  '' ]
+      AvailabilityZone: !Select [ 1, !GetAZs  '' ] #us-east-1b
       CidrBlock: !Ref PrivateDBSubnet2CIDR
       MapPublicIpOnLaunch: false
       Tags:
         - Key: Name
           Value: !Sub ${EnvironmentName}-PrivateDBSubnet2
-  PrivateDBSubnet3:
-    Type: AWS::EC2::Subnet
-    Properties:
-      VpcId: !Ref VPC
-      AvailabilityZone: !Select [ 2, !GetAZs  '' ]
-      CidrBlock: !Ref PrivateDBSubnet3CIDR
-      MapPublicIpOnLaunch: false
-      Tags:
-        - Key: Name
-          Value: !Sub ${EnvironmentName}-PrivateDBSubnet3
-
+  
   NatGateway1EIP:
     Type: AWS::EC2::EIP
     DependsOn: InternetGatewayAttachment
@@ -182,12 +136,6 @@ Resources:
       Domain: vpc
 
   NatGateway2EIP:
-    Type: AWS::EC2::EIP
-    DependsOn: InternetGatewayAttachment
-    Properties:
-      Domain: vpc
-
-  NatGateway3EIP:
     Type: AWS::EC2::EIP
     DependsOn: InternetGatewayAttachment
     Properties:
@@ -205,12 +153,6 @@ Resources:
       AllocationId: !GetAtt NatGateway2EIP.AllocationId
       SubnetId: !Ref PublicSubnet2
   
-  NatGateway3:
-    Type: AWS::EC2::NatGateway
-    Properties:
-      AllocationId: !GetAtt NatGateway3EIP.AllocationId
-      SubnetId: !Ref PublicSubnet3
-
   PublicRouteTable:
     Type: AWS::EC2::RouteTable
     Properties:
@@ -238,21 +180,15 @@ Resources:
     Properties:
       RouteTableId: !Ref PublicRouteTable
       SubnetId: !Ref PublicSubnet2
-
-  PublicSubnet3RouteTableAssociation:
-    Type: AWS::EC2::SubnetRouteTableAssociation
-    Properties:
-      RouteTableId: !Ref PublicRouteTable
-      SubnetId: !Ref PublicSubnet3
-
+  
   PrivateRouteTable1:
     Type: AWS::EC2::RouteTable
     Properties:
       VpcId: !Ref VPC
       Tags:
         - Key: Name
-          Value: !Sub ${EnvironmentName}PrivateRouteTable1
-
+          Value: !Sub ${EnvironmentName}-PrivateRouteTable1
+  
   PrivateRouteTable2:
     Type: AWS::EC2::RouteTable
     Properties:
@@ -267,34 +203,53 @@ Resources:
       RouteTableId: !Ref PrivateRouteTable1
       DestinationCidrBlock: 0.0.0.0/0
       NatGatewayId: !Ref NatGateway1
-
+  
   DefaultPrivateRoute2:
     Type: AWS::EC2::Route
     Properties:
       RouteTableId: !Ref PrivateRouteTable2
       DestinationCidrBlock: 0.0.0.0/0
       NatGatewayId: !Ref NatGateway2
-
+  
   PrivateSubnet1RouteTableAssociation1:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       RouteTableId: !Ref PrivateRouteTable1
       SubnetId: !Ref PrivateSubnet1
-
+  
   PrivateSubnet1RouteTableAssociation2:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       RouteTableId: !Ref PrivateRouteTable1
       SubnetId: !Ref PrivateDBSubnet1
-
+  
   PrivateSubnet2RouteTableAssociation1:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       RouteTableId: !Ref PrivateRouteTable2
       SubnetId: !Ref PrivateSubnet2
-
+  
   PrivateSubnet2RouteTableAssociation2:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       RouteTableId: !Ref PrivateRouteTable2
       SubnetId: !Ref PrivateDBSubnet2
+
+Outputs: 
+  vpcID:
+    Description: sprintqa vpc id
+    Value: !Ref VPC
+    Export: 
+      Name: sprintqaVPC   
+
+  PublicSubnet1:
+    Description: Public Subnet 1 ID
+    Value: !Ref PublicSubnet1
+    Export:
+      Name: PublicSubnet1 
+  
+  PrivateSubnet1:
+    Description: Private Subnet 1 ID
+    Value: !Ref PrivateSubnet1
+    Export:
+      Name: PrivateSubnet1
