@@ -1,4 +1,4 @@
-Description:  Automation of 2 EC2 creations in us-east-1
+Description:  Automation of 2. EC2 creations in us-east-1
 Parameters:
   amiId:
     Description: AMI for the 1st instance(default is latest AmaLinux2)
